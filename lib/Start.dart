@@ -1,9 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_signin_button/flutter_signin_button.dart';
-import 'package:authentification/Login.dart';
-import 'SignUp.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 
 class Start extends StatefulWidget {
   @override
@@ -12,29 +8,6 @@ class Start extends StatefulWidget {
 
 class _StartState extends State<Start> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
-
-  Future<UserCredential> googleSignIn() async {
-    GoogleSignIn googleSignIn = GoogleSignIn();
-    GoogleSignInAccount googleUser = await googleSignIn.signIn();
-    if (googleUser != null) {
-      GoogleSignInAuthentication googleAuth = await googleUser.authentication;
-
-      if (googleAuth.idToken != null && googleAuth.accessToken != null) {
-        final AuthCredential credential = GoogleAuthProvider.credential(
-            accessToken: googleAuth.accessToken, idToken: googleAuth.idToken);
-
-        final UserCredential user =
-            await _auth.signInWithCredential(credential);
-
-        await Navigator.pushReplacementNamed(context, "/");
-
-        return user;
-      } else {
-        throw StateError('Missing Google Auth Token');
-      }
-    } else
-      throw StateError('Sign in Aborted');
-  }
 
   navigateToLogin() async {
     Navigator.pushReplacementNamed(context, "Login");
@@ -54,7 +27,8 @@ class _StartState extends State<Start> {
             Container(
               height: 400,
               child: Image(
-                image: AssetImage("images/start.jpg"),
+                image: NetworkImage(
+                    "https://ichoosetobeseen.com/wp-content/uploads/2018/07/what-a-plant-knows.jpg"),
                 fit: BoxFit.contain,
               ),
             ),
@@ -68,15 +42,15 @@ class _StartState extends State<Start> {
                         color: Colors.black),
                     children: <TextSpan>[
                   TextSpan(
-                      text: 'X Groceries',
+                      text: 'Fresh Flora',
                       style: TextStyle(
                           fontSize: 30.0,
                           fontWeight: FontWeight.bold,
-                          color: Colors.orange))
+                          color: Colors.green))
                 ])),
             SizedBox(height: 10.0),
             Text(
-              'Fresh Groceries Delivered at your Doorstep',
+              'Plants Delivered at your Doorstep',
               style: TextStyle(color: Colors.black),
             ),
             SizedBox(height: 30.0),
@@ -117,8 +91,6 @@ class _StartState extends State<Start> {
               ],
             ),
             SizedBox(height: 20.0),
-            SignInButton(Buttons.Google,
-                text: "Sign up with Google", onPressed: googleSignIn)
           ],
         ),
       ),

@@ -72,13 +72,23 @@ class _LoginState extends State<Login> {
       child: Container(
         child: Column(
           children: <Widget>[
-            Container(
-              height: 400,
-              child: Image(
-                image: AssetImage("images/login.jpg"),
-                fit: BoxFit.contain,
-              ),
-            ),
+            SizedBox(height: 100.0),
+            RichText(
+                text: TextSpan(
+                    text: 'Stay',
+                    style: TextStyle(
+                        fontSize: 25.0,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.blue),
+                    children: <TextSpan>[
+                  TextSpan(
+                      text: 'Green',
+                      style: TextStyle(
+                          fontSize: 30.0,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.green))
+                ])),
+            SizedBox(height: 300.0),
             Container(
               child: Form(
                 key: _formKey,

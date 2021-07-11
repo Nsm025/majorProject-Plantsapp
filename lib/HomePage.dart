@@ -1,8 +1,7 @@
-import 'package:authentification/Start.dart';
+import 'package:authentification/comments.dart';
+import 'package:authentification/screens/home/home_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-// import 'package:authentification/Start.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -35,11 +34,8 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  signOut() async {
+  signout() async {
     _auth.signOut();
-
-    final googleSignIn = GoogleSignIn();
-    await googleSignIn.signOut();
   }
 
   @override
@@ -52,41 +48,87 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Container(
-      child: !isloggedin
-          ? CircularProgressIndicator()
-          : Column(
-              children: <Widget>[
-                SizedBox(height: 40.0),
-                Container(
-                  height: 300,
-                  child: Image(
-                    image: AssetImage("images/welcome.jpg"),
-                    fit: BoxFit.contain,
+        drawer: Drawer(
+            child: Column(
+          children: [
+            DrawerHeader(
+              child: Container(
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: Text(
+                      'Hi There',
+                      style: TextStyle(color: Colors.white),
+                    ),
                   ),
-                ),
-                Container(
-                  child: Text(
-                    "Hello ${user.displayName} you are Logged in as ${user.email}",
-                    style:
-                        TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
-                  ),
-                ),
-                RaisedButton(
-                  padding: EdgeInsets.fromLTRB(70, 10, 70, 10),
-                  onPressed: signOut,
-                  child: Text('Signout',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 20.0,
-                          fontWeight: FontWeight.bold)),
-                  color: Colors.orange,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20.0),
-                  ),
-                )
-              ],
+                  height: 100,
+                  color: Colors.black),
             ),
-    ));
+            ListTile(
+              title: Text("Your Account"),
+              leading: Icon(Icons.person),
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => HomeScreen()));
+              },
+            ),
+            ListTile(
+              title: Text("Add Reviews"),
+              leading: Icon(Icons.message_rounded),
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => ChatScreen()));
+              },
+            ),
+            ListTile(
+              title: Text("Log out"),
+              leading: Icon(Icons.logout),
+              onTap: () => showDialog(
+                context: context,
+                builder: (BuildContext context) => AlertDialog(
+                  title: const Text('Alert Message'),
+                  content: const Text('Are you sure you want to logout?'),
+                  actions: <Widget>[
+                    ElevatedButton(
+                      onPressed: () => signout(),
+                      child: Text('Yes,Logout'),
+                    ),
+                    ElevatedButton(
+                      onPressed: () => Navigator.pop(context, 'Cancel'),
+                      child: const Text('Cancel'),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        )),
+        appBar: AppBar(
+          title: Text('DashBoard'),
+        ),
+        body: Container(
+          child: !isloggedin
+              ? CircularProgressIndicator()
+              : Column(
+                  children: <Widget>[
+                    SizedBox(height: 35.0),
+                    Container(
+                      height: 400,
+                      child: Image(
+                        image: NetworkImage(
+                            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTFy5jCp6a0YdIi_UT648ZSvu1qOLiAvANB1w&usqp=CAU"),
+                        fit: BoxFit.contain,
+                      ),
+                    ),
+                    SizedBox(height: 40),
+                    Container(
+                      child: Text(
+                        "Hello ${user.displayName} you are Logged in as ${user.email}",
+                        style: TextStyle(
+                            fontSize: 20.0, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ],
+                ),
+        ));
   }
 }
